@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC CMC 2026 - Team Shared Checklist</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #003087;
+            border-bottom: 4px solid #e31c3d;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #003087;
+            background-color: #e8f0fe;
+            padding: 10px;
+            margin-top: 30px;
+            border-left: 5px solid #003087;
+        }
+        h3 {
+            color: #0055a4;
+            margin-top: 20px;
+            border-bottom: 2px solid #e8f0fe;
+            padding-bottom: 5px;
+        }
+        h4 {
+            color: #2c5aa0;
+            margin-top: 15px;
+        }
+        .checklist-item {
+            background-color: white;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-left: 3px solid #ddd;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .checklist-item:hover {
+            border-left-color: #003087;
+            background-color: #f9f9f9;
+        }
+        .checklist-item.checked {
+            background-color: #e8f5e9;
+            border-left-color: #28a745;
+        }
+        .item-content {
+            flex: 1;
+        }
+        .item-meta {
+            font-size: 0.75em;
+            color: #666;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        .critical {
+            background-color: #fff3cd;
+            border-left-color: #ffc107;
+            font-weight: bold;
+        }
+        .deadline {
+            background-color: #f8d7da;
+            border-left-color: #e31c3d;
+            font-weight: bold;
+        }
+        .tip {
+            background-color: #d1ecf1;
+            border-left-color: #17a2b8;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .easter-egg {
+            background-color: #d4edda;
+            border: 2px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .allowance {
+            background-color: #ffe6e6;
+            border: 2px solid #e31c3d;
+            padding: 12px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            margin: 20px 0;
+        }
+        th {
+            background-color: #003087;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Header sticky bar */
+        .header-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: white;
+            padding: 15px;
+            border-bottom: 3px solid #003087;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .header-title {
+            margin: 0;
+            color: #003087;
+            font-size: 1.5em;
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: #0055a4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #003087;
+        }
+        
+        button.danger {
+            background-color: #e31c3d;
+        }
+        
+        button.danger:hover {
+            background-color: #c41230;
+        }
+        
+        .progress-text {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #003087;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e8f0fe;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 25px;
+        }
+        
+        .progress-bar {
+            width: 0%;
+            background: linear-gradient(90deg, #003087, #0055a4);
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        /* Activity feed */
+        .activity-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 350px;
+            height: 100vh;
+            background-color: white;
+            border-left: 3px solid #003087;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+        }
+        
+        .activity-panel.open {
+            transform: translateX(0);
+        }
+        
+        .activity-header {
+            background-color: #003087;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+        }
+        
+        .activity-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+        }
+        
+        .activity-item .name {
+            font-weight: bold;
+            color: #003087;
+        }
+        
+        .activity-item .time {
+            color: #666;
+            font-size: 0.85em;
+        }
+        
+        .activity-item.checked {
+            background-color: #e8f5e9;
+        }
+        
+        .activity-item.unchecked {
+            background-color: #ffebee;
+        }
+        
+        /* Name prompt */
+        .name-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .name-prompt {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .name-prompt h2 {
+            margin-top: 0;
+            background: none;
+            padding: 0;
+            border: none;
+        }
+        
+        .name-prompt input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #003087;
+            border-radius: 5px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        
+        .name-prompt button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        
+        /* Online users */
+        .online-users {
+            background-color: #e8f5e9;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .user-badge {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            margin: 3px;
+            font-size: 0.85em;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: #003087;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            border: 2px solid #e31c3d;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .activity-panel {
+                width: 100%;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .header-buttons {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        🔄 Connecting to team database...<br>
+        <small>Loading shared checklist</small>
+    </div>
+    
+    <div id="error-message" style="display: none;"></div>
+    
+    <!-- Name prompt overlay -->
+    <div id="name-overlay" class="name-overlay" style="display: none;">
+        <div class="name-prompt">
+            <h2>👋 Welcome to Team Edmund & Fitz!</h2>
+            <p>Enter your name to start collaborating with your team:</p>
+            <input type="text" id="name-input" placeholder="Your Name (e.g., Evan)" maxlength="30" autofocus>
+            <button onclick="saveName()">Start Collaborating</button>
+            <p style="font-size: 0.85em; color: #666; margin-top: 15px;">
+                💡 Your name will be shown when you check/uncheck items so your team knows who's working on what.
+            </p>
+        </div>
+    </div>
+    
+    <!-- Activity panel -->
+    <div id="activity-panel" class="activity-panel">
+        <div class="activity-header">
+            <span>📊 Recent Activity</span>
+            <button onclick="toggleActivity()" style="padding: 5px 10px; font-size: 12px;">Close</button>
+        </div>
+        <div id="activity-feed"></div>
+    </div>
+    
+    <!-- Main content -->
+    <div id="main-content" style="display: none;">
+        <!-- Header bar -->
+        <div class="header-bar">
+            <div class="header-content">
+                <h2 class="header-title">📋 ABC CMC 2026 - Team Checklist</h2>
+                <div class="header-buttons">
+                    <button onclick="toggleActivity()">📊 Activity</button>
+                    <button onclick="exportProgress()">📥 Export</button>
+                    <button onclick="changeName()">👤 Change Name</button>
+                    <button onclick="resetAll()" class="danger">🔄 Reset All</button>
+                </div>
+            </div>
+            
+            <div class="online-users" id="online-users">
+                <strong>🟢 Online Now:</strong> <span id="user-list">Loading...</span>
+            </div>
+            
+            <div class="progress-text" id="progress-text">Progress: 0 of 0 items completed (0%)</div>
+            <div class="progress-bar-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+        </div>
+        
+        <div style="background-color: #d4edda; border: 2px solid #28a745; padding: 15px; margin: 20px 0; border-radius: 5px;">
+            <h3 style="margin-top: 0; color: #155724;">✨ Team Collaboration Features:</h3>
+            <ul style="margin-bottom: 0;">
+                <li><strong>Real-Time Sync:</strong> See updates instantly when anyone checks/unchecks a box</li>
+                <li><strong>Team Visibility:</strong> Everyone sees WHO checked each item and WHEN</li>
+                <li><strong>Activity Feed:</strong> Click "Activity" to see recent team actions</li>
+                <li><strong>Online Status:</strong> See who's currently viewing the checklist</li>
+                <li><strong>Shared Progress:</strong> One unified progress bar for the whole team</li>
+            </ul>
+        </div>
+        
+        <p><strong>Project:</strong> Hyatt Regency Salt Lake City, UT | <strong>Competition Dates:</strong> March 18-20, 2026</p>
+        
+        <div class="easter-egg">
+            🎬 EASTER EGG REQUIREMENT: Include a clean page at the VERY END of your RFP submission with each team member's "who would play them in a movie" actor/actress. This proves you read the FAQ document!
+        </div>
+        
+        <!-- CHECKLIST CONTENT PLACEHOLDER -->
+        <div id="checklist-content">
+            <div class="loading">Loading checklist items...</div>
+        </div>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <script>
+        // ⚠️ IMPORTANT: YOU NEED TO REPLACE THESE WITH YOUR FIREBASE CONFIG
+        // Instructions below on how to get these values
+       const firebaseConfig = {
+  apiKey: "AIzaSyA...",
+  authDomain: "abc-cmc-2026.firebaseapp.com",
+  databaseURL: "https://abc-cmc-2026-default-rtdb.firebaseio.com",
+  projectId: "abc-cmc-2026",
+  storageBucket: "abc-cmc-2026.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:..."
+};
+        
+        // Check if Firebase is configured
+        if (firebaseConfig.apiKey === "YOUR-API-KEY-HERE") {
+            document.getElementById('loading').innerHTML = `
+                <div class="error">
+                    <h2>⚠️ Firebase Not Configured</h2>
+                    <p>This checklist needs to be connected to Firebase to enable team collaboration.</p>
+                    <p><strong>Setup Instructions:</strong></p>
+                    <ol>
+                        <li>See the SETUP_INSTRUCTIONS.md file</li>
+                        <li>Create a free Firebase project (5 minutes)</li>
+                        <li>Replace the config values in this HTML file</li>
+                        <li>Upload and share with your team!</li>
+                    </ol>
+                    <p>Don't worry - it's free and easy! Check the instructions document.</p>
+                </div>
+            `;
+            throw new Error('Firebase not configured');
+        }
+        
+        // Initialize Firebase
+        let app, database, userName, userId;
+        
+        try {
+            app = firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+            console.log('Firebase initialized successfully');
+            initializeApp();
+        } catch (error) {
+            document.getElementById('loading').innerHTML = `
+                <div class="error">
+                    <h2>❌ Connection Error</h2>
+                    <p>Could not connect to Firebase: ${error.message}</p>
+                    <p>Please check your configuration and internet connection.</p>
+                </div>
+            `;
+        }
+        
+        function initializeApp() {
+            // Check for saved name
+            userName = localStorage.getItem('teamMemberName');
+            
+            if (!userName) {
+                showNamePrompt();
+            } else {
+                startApp();
+            }
+        }
+        
+        function showNamePrompt() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('name-overlay').style.display = 'flex';
+            document.getElementById('name-input').focus();
+            
+            document.getElementById('name-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveName();
+                }
+            });
+        }
+        
+        function saveName() {
+            const input = document.getElementById('name-input').value.trim();
+            if (!input) {
+                alert('Please enter your name');
+                return;
+            }
+            
+            userName = input;
+            localStorage.setItem('teamMemberName', userName);
+            document.getElementById('name-overlay').style.display = 'none';
+            startApp();
+        }
+        
+        function changeName() {
+            if (confirm('Change your name? This will update how you appear to your team.')) {
+                userName = null;
+                localStorage.removeItem('teamMemberName');
+                showNamePrompt();
+            }
+        }
+        
+        function startApp() {
+            userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            
+            // Show main content
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            
+            // Set up presence
+            setupPresence();
+            
+            // Load checklist
+            loadChecklist();
+            
+            // Listen for activity
+            loadActivity();
+        }
+        
+        function setupPresence() {
+            const presenceRef = database.ref('presence/' + userId);
+            const connectedRef = database.ref('.info/connected');
+            
+            connectedRef.on('value', (snap) => {
+                if (snap.val() === true) {
+                    presenceRef.set({
+                        name: userName,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    });
+                    
+                    presenceRef.onDisconnect().remove();
+                }
+            });
+            
+            // Listen for all online users
+            database.ref('presence').on('value', (snapshot) => {
+                const users = snapshot.val() || {};
+                const userNames = Object.values(users).map(u => u.name);
+                
+                const userListHtml = userNames.length > 0
+                    ? userNames.map(name => `<span class="user-badge">${name}</span>`).join('')
+                    : 'No one online';
+                    
+                document.getElementById('user-list').innerHTML = userListHtml;
+            });
+        }
+        
+        // Checklist structure
+        const checklistSections = {
+            "setup": {
+                title: "1. Initial Setup & Registration",
+                items: [
+                    "Assemble 4-person competition team",
+                    "Identify Team Captain",
+                    "Identify Co-Captain",
+                    "Optional: Select up to 2 alternates",
+                    "Identify Faculty Advisor or ABC chapter staff/member",
+                    "Email Team Captain & Co-Captain info to Amanda Fry (abccmc@henselphelps.com)",
+                    "Email Team Captain & Co-Captain info to Haley Moyers (moyers@abc.org)",
+                    "Gain access to BuildingConnected platform",
+                    "Download ALL RFP documents from BuildingConnected",
+                    "Request Ediphi access via BuildingConnected",
+                    "Verify Ediphi access received by Friday, Jan 30, 2026",
+                    "Watch Ediphi tutorial videos"
+                ]
+            },
+            "branding": {
+                title: "2. Company Branding & Identity",
+                items: [
+                    "Create creative company name for your GC firm",
+                    "Design company logo",
+                    "Develop team member resumes/experience",
+                    "Create company portfolio"
+                ]
+            },
+            "scope": {
+                title: "3. Project Understanding - Scope Modifications",
+                critical: true,
+                items: [
+                    "Understand: Levels 20-25 = SHELL ONLY (structure, cores, envelope, min MEP)",
+                    "EXCLUDE from Levels 20-25: finishes, ceilings, fixtures, furniture, MEP branch",
+                    "Understand: Site is 'pad ready' - NO demo or underground utilities by GC",
+                    "INCLUDE: All foundations, piers, caissons per drawings",
+                    "Understand: Kitchen/Laundry/F&B Equipment by separate contractor",
+                    "INCLUDE in schedule: 12 weeks for separate contractor work",
+                    "Understand: Guestroom Furniture/Artwork = ADD ALTERNATE only (OFCI)",
+                    "INCLUDE: $5M allowance for low-voltage turnkey",
+                    "INCLUDE: $200K allowance for Owner's building permit fees"
+                ]
+            },
+            "rfis": {
+                title: "4. RFI Submissions",
+                items: [
+                    "Prepare Round 1 RFIs (up to 5) using CMC RFI Form template",
+                    "Submit Round 1 RFIs via BuildingConnected by Feb 2, 9PM MST",
+                    "Review Round 1 RFI responses (expected Feb 9)",
+                    "Prepare Round 2 RFIs (up to 5) using CMC RFI Form template",
+                    "Submit Round 2 RFIs via BuildingConnected by Feb 23, 9PM MST",
+                    "Review Round 2 RFI responses (expected Mar 2)"
+                ]
+            },
+            "cover_letter": {
+                title: "5. Step 1 - Cover Letter",
+                items: [
+                    "Address to: Ms. Amanda Fry, ABC, 7200 S. Alton Way Suite B-200, Centennial CO 80112",
+                    "Summarize overall project cost",
+                    "State anticipated substantial completion date",
+                    "List local ABC representative name and contact info",
+                    "Include 'guarantee certification of proposal' statement",
+                    "Sign in BLUE INK by Project Executive",
+                    "Sign in BLUE INK by local ABC Representative",
+                    "Limit to ONE (1) page",
+                    "Get peer review from contractors/alumni"
+                ]
+            },
+            "estimate": {
+                title: "6. Step 1 - Estimate",
+                items: [
+                    "Export Exhibit A.1 (CSI Summary) from Ediphi to Excel",
+                    "Export Exhibit A.2 (Uniformat Summary) from Ediphi to Excel",
+                    "Complete Exhibit B (General Conditions) using template",
+                    "Prepare Clarifications & Assumptions organized by CSI Division",
+                    "Upload Excel A.1 file (properly labeled)",
+                    "Upload Excel A.2 file (properly labeled)",
+                    "Upload Excel B file (properly labeled)",
+                    "Get peer review from contractors on estimate"
+                ]
+            },
+            "pm_narrative": {
+                title: "7. Project Management Narrative (8 pages max)",
+                items: [
+                    "Get boilerplate draft done early for peer reviews",
+                    "1a. Describe 3+ similar past projects with size/complexity",
+                    "1b. Plan to meet/exceed 10% MWDVBE participation goal",
+                    "1c. Identify self-performed work (min 7% excluding fee/GC)",
+                    "1d. Discuss business practices/processes and innovations",
+                    "1e. Detail BIM, AI, robotics, drones experience & proposed use",
+                    "1e. List technology costs as separate breakout in estimate",
+                    "1f. Select 3 high-risk scopes with mitigation plans",
+                    "1g. Strategy to minimize Tariffs and material escalation",
+                    "1h. Logistics plan and staging strategy",
+                    "1h. Pedestrian walkway safety analysis and routing plan"
+                ]
+            },
+            "org_chart": {
+                title: "8. Organizational Chart & Staffing",
+                items: [
+                    "List all key staff by name with man-months projections",
+                    "Provide job descriptions for ALL positions",
+                    "Designate full-time Project Manager (separate person)",
+                    "Designate full-time Superintendent (separate person)",
+                    "Designate full-time Safety Manager (separate person)"
+                ]
+            },
+            "site_u": {
+                title: "9. Site Utilization Plans",
+                items: [
+                    "Phase 1: Job Start-up Site U Plan - all elements",
+                    "Phase 2: End of Structural Steel Site U Plan - all elements",
+                    "Include: Site Access/Egress, Security, Material Staging",
+                    "Include: Crane locations/types/swing radius",
+                    "Include: Temporary facilities, parking, delivery routing",
+                    "Include: Protection of existing structures"
+                ]
+            },
+            "schedule": {
+                title: "10. Schedule Documents",
+                items: [
+                    "Write schedule narrative (aggressive start, risks, sequences)",
+                    "Create CPM schedule with WBS organization",
+                    "Create full Gantt Chart with all required fields",
+                    "Create Critical Path Gantt Chart",
+                    "Complete all 25 project milestones in Exhibit D.1",
+                    "Mark which milestones are on Critical Path",
+                    "Create SIPS Schedule for Guest Rooms (Exhibit D.2)",
+                    "Create colored exterior glazing sequence map",
+                    "Complete Exhibit C with 7+ long lead items"
+                ]
+            },
+            "qc": {
+                title: "11. Quality Control (5 pages max)",
+                items: [
+                    "Don't use canned QC plans - make project-specific!",
+                    "Write QC narrative covering all 10 required topics",
+                    "Create 3 QC Inspection forms (Piers, Glazing, Chillers)",
+                    "Create detailed QC Flow Chart (Procurement → Final)",
+                    "Get peer reviews from contractors"
+                ]
+            },
+            "safety": {
+                title: "12. Safety (8 pages max)",
+                items: [
+                    "Don't use canned Safety plans - make project-specific!",
+                    "Think outside the box (not just OSHA Fatal Four!)",
+                    "Write safety narrative covering all 22 required topics",
+                    "Create Mental Health promotional poster",
+                    "Identify top 4 significant hazards/risks with prevention",
+                    "Create Public Hazard Plan for pedestrians/Convention Center",
+                    "Complete AHA using Exhibit E template",
+                    "Create Emergency Action Plan/Map with all elements",
+                    "Complete Incident Report using Exhibit F & scenario"
+                ]
+            },
+            "submission": {
+                title: "13. Step 1 Submission Prep",
+                deadline: true,
+                items: [
+                    "Get multiple peer reviews on entire proposal",
+                    "Meet with contractors to compare to their RFPs",
+                    "Verify NO canned content from internet/AI",
+                    "Compile complete proposal as single PDF",
+                    "CREATE ELECTRONIC TABS matching hard copy",
+                    "CREATE BOOKMARKS for navigation (REQUIRED!)",
+                    "ADD EASTER EGG PAGE: movie actors for each team member!",
+                    "Label PDF correctly",
+                    "Upload PDF to BuildingConnected by Mar 16, 9PM MST",
+                    "Send confirmation email to abccmc@henselphelps.com",
+                    "Prepare hard copy binder with proper tabs",
+                    "Submit hard copy to judges by Mar 18, 10AM"
+                ]
+            },
+            "step2_prep": {
+                title: "14. Step 2 - Competition Day Prep",
+                items: [
+                    "Arrange travel to Salt Lake City",
+                    "Book lodging",
+                    "Pack computers, office supplies, monitors",
+                    "Pack scales and quantity survey software",
+                    "Review downloaded RFP documents for Step 2"
+                ]
+            },
+            "step3_prep": {
+                title: "15. Step 3 - Interview Prep (START EARLY!)",
+                critical: true,
+                items: [
+                    "Start presentation BEFORE arriving (assume you'll shortlist!)",
+                    "Create 10-15 minute presentation draft",
+                    "Rehearse in front of peers",
+                    "Rehearse in front of contractors",
+                    "Rehearse in front of faculty",
+                    "Get grilled with practice questions",
+                    "Refine presentation based on feedback",
+                    "Practice time management (hard stop!)",
+                    "Prepare for Q&A scenarios"
+                ]
+            }
+        };
+        
+        function loadChecklist() {
+            const container = document.getElementById('checklist-content');
+            let html = '';
+            let globalIndex = 0;
+            
+            for (const [sectionId, section] of Object.entries(checklistSections)) {
+                html += `<h3>${section.title}</h3>`;
+                
+                section.items.forEach((itemText, localIndex) => {
+                    const itemId = `item_${sectionId}_${localIndex}`;
+                    const classes = ['checklist-item'];
+                    if (section.critical) classes.push('critical');
+                    if (section.deadline) classes.push('deadline');
+                    
+                    html += `
+                        <div class="${classes.join(' ')}" id="container_${itemId}">
+                            <div class="item-content">
+                                <input type="checkbox" 
+                                       id="${itemId}" 
+                                       data-index="${globalIndex}"
+                                       onchange="handleCheckbox(this, '${itemId}', '${itemText.replace(/'/g, "\\'")}')">
+                                <label for="${itemId}">${itemText}</label>
+                            </div>
+                            <div class="item-meta" id="meta_${itemId}"></div>
+                        </div>
+                    `;
+                    globalIndex++;
+                });
+            }
+            
+            container.innerHTML = html;
+            
+            // Load checkbox states from Firebase
+            loadCheckboxStates();
+        }
+        
+        function loadCheckboxStates() {
+            database.ref('checkboxes').on('value', (snapshot) => {
+                const data = snapshot.val() || {};
+                
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    const itemId = checkbox.id;
+                    const state = data[itemId];
+                    
+                    if (state) {
+                        checkbox.checked = state.checked;
+                        
+                        // Update visual state
+                        const container = document.getElementById('container_' + itemId);
+                        if (state.checked) {
+                            container.classList.add('checked');
+                        } else {
+                            container.classList.remove('checked');
+                        }
+                        
+                        // Update meta info
+                        const meta = document.getElementById('meta_' + itemId);
+                        if (state.checked && state.by) {
+                            const date = new Date(state.timestamp);
+                            const timeStr = date.toLocaleString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: '2-digit'
+                            });
+                            meta.textContent = `✓ ${state.by} (${timeStr})`;
+                        } else {
+                            meta.textContent = '';
+                        }
+                    }
+                });
+                
+                updateProgress();
+            });
+        }
+        
+        function handleCheckbox(checkbox, itemId, itemText) {
+            const checked = checkbox.checked;
+            
+            database.ref('checkboxes/' + itemId).set({
+                checked: checked,
+                by: userName,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                text: itemText
+            });
+            
+            // Add to activity
+            database.ref('activity').push({
+                type: checked ? 'checked' : 'unchecked',
+                item: itemText,
+                by: userName,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+        
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const total = checkboxes.length;
+            const percentage = Math.round((checked / total) * 100);
+            
+            document.getElementById('progress-text').textContent = 
+                `Progress: ${checked} of ${total} items completed (${percentage}%)`;
+            
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = percentage + '%';
+            
+            if (percentage > 5) {
+                progressBar.textContent = percentage + '%';
+            } else {
+                progressBar.textContent = '';
+            }
+        }
+        
+        function loadActivity() {
+            database.ref('activity').limitToLast(50).on('value', (snapshot) => {
+                const activities = [];
+                snapshot.forEach((child) => {
+                    activities.push({
+                        key: child.key,
+                        ...child.val()
+                    });
+                });
+                
+                activities.reverse(); // Most recent first
+                
+                const feed = document.getElementById('activity-feed');
+                if (activities.length === 0) {
+                    feed.innerHTML = '<div class="activity-item">No activity yet. Start checking items!</div>';
+                } else {
+                    feed.innerHTML = activities.map(activity => {
+                        const date = new Date(activity.timestamp);
+                        const timeStr = date.toLocaleString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit'
+                        });
+                        
+                        const icon = activity.type === 'checked' ? '✅' : '❌';
+                        const action = activity.type === 'checked' ? 'completed' : 'unchecked';
+                        
+                        return `
+                            <div class="activity-item ${activity.type}">
+                                <div>${icon} <span class="name">${activity.by}</span> ${action}:</div>
+                                <div style="margin-left: 20px; color: #444;">${activity.item}</div>
+                                <div class="time">${timeStr}</div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            });
+        }
+        
+        function toggleActivity() {
+            const panel = document.getElementById('activity-panel');
+            panel.classList.toggle('open');
+        }
+        
+        function exportProgress() {
+            database.ref('checkboxes').once('value', (snapshot) => {
+                const data = snapshot.val() || {};
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                
+                let completedItems = [];
+                let pendingItems = [];
+                
+                checkboxes.forEach(checkbox => {
+                    const itemId = checkbox.id;
+                    const label = checkbox.nextElementSibling.textContent.trim();
+                    const state = data[itemId];
+                    
+                    if (state && state.checked) {
+                        const date = new Date(state.timestamp);
+                        completedItems.push(`✓ ${label} (by ${state.by}, ${date.toLocaleDateString()})`);
+                    } else {
+                        pendingItems.push(`☐ ${label}`);
+                    }
+                });
+                
+                const exportText = `ABC CMC 2026 - Team Edmund & Fitz Progress Report
+Generated: ${new Date().toLocaleString()}
+
+COMPLETED ITEMS (${completedItems.length}):
+${completedItems.join('\n')}
+
+PENDING ITEMS (${pendingItems.length}):
+${pendingItems.join('\n')}
+`;
+                
+                const blob = new Blob([exportText], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Team_Edmund_Fitz_Progress_' + new Date().toISOString().split('T')[0] + '.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            });
+        }
+        
+        function resetAll() {
+            if (!confirm('⚠️ WARNING: This will UNCHECK ALL BOXES for THE ENTIRE TEAM!\n\nAre you absolutely sure? This cannot be undone!')) {
+                return;
+            }
+            
+            if (!confirm('Really reset everything? Last chance!')) {
+                return;
+            }
+            
+            database.ref('checkboxes').remove();
+            database.ref('activity').push({
+                type: 'reset',
+                by: userName,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                item: 'Reset all checkboxes'
+            });
+            
+            alert('All checkboxes have been reset!');
+        }
+    </script>
+</body>
+</html>
