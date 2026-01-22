@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC CMC 2026 - Complete Master Checklist & Timeline</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 
+        .progress-container {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #003087, #0055a4);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .clear-button {
+            background-color: #e31c3d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .clear-button:hover {
+            background-color: #c01735;
+        }
+        .export-button {
+            background-color: #003087;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+        .export-button:hover {
+            background-color: #002060;
+        }
+        input[type="checkbox"]:checked + label,
+        .checklist-item:has(input[type="checkbox"]:checked) {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+        h1 {
+            color: #003087;
+            border-bottom: 4px solid #e31c3d;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #003087;
+            background-color: #e8f0fe;
+            padding: 10px;
+            margin-top: 30px;
+            border-left: 5px solid #003087;
+        }
+        h3 {
+            color: #0055a4;
+            margin-top: 20px;
+            border-bottom: 2px solid #e8f0fe;
+            padding-bottom: 5px;
+        }
+        h4 {
+            color: #2c5aa0;
+            margin-top: 15px;
+        }
+        .checklist-item {
+            background-color: white;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-left: 3px solid #ddd;
+            transition: border-color 0.3s;
+        }
+        .checklist-item:hover {
+            border-left-color: #003087;
+            background-color: #f9f9f9;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .critical {
+            background-color: #fff3cd;
+            border-left-color: #ffc107;
+            font-weight: bold;
+        }
+        .deadline {
+            background-color: #f8d7da;
+            border-left-color: #e31c3d;
+            font-weight: bold;
+        }
+        .tip {
+            background-color: #d1ecf1;
+            border-left-color: #17a2b8;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .easter-egg {
+            background-color: #d4edda;
+            border: 2px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .timeline {
+            margin: 20px 0;
+        }
+        .timeline-item {
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #003087;
+            position: relative;
+        }
+        .timeline-date {
+            font-weight: bold;
+            color: #e31c3d;
+            font-size: 1.1em;
+        }
+        .allowance {
+            background-color: #ffe6e6;
+            border: 2px solid #e31c3d;
+            padding: 12px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            margin: 20px 0;
+        }
+        th {
+            background-color: #003087;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .section-number {
+            color: #e31c3d;
+            font-weight: bold;
+        }
+        @media print {
+            body {
+                background-color: white;
+            }
+            .checklist-item, .timeline-item {
+                break-inside: avoid;
+            }
+            /* Hide interactive elements when printing */
+            button {
+                display: none !important;
+            }
+            #progress-text, #progress-bar {
+                display: none !important;
+            }
+            /* Show checkboxes in print */
+            input[type="checkbox"] {
+                -webkit-appearance: checkbox;
+                appearance: checkbox;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5n4KB54zOBzE4VcXs53NF2R6EfhincqU",
+            authDomain: "abc-cmc-2026-99315.firebaseapp.com",
+            databaseURL: "https://abc-cmc-2026-99315-default-rtdb.firebaseio.com",
+            projectId: "abc-cmc-2026-99315",
+            storageBucket: "abc-cmc-2026-99315.firebasestorage.app",
+            messagingSenderId: "943913844211",
+            appId: "1:943913844211:web:7f950c2e53ee6bb4696686"
+        };
+        
+        let database, userName, userId;
+        
+        // Initialize Firebase
+        try {
+            firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+            initApp();
+        } catch (error) {
+            document.body.innerHTML = '<div style="padding:50px;text-align:center;color:red;">Error: ' + error.message + '</div>';
+        }
+        
+        function initApp() {
+            userName = localStorage.getItem('teamMemberName');
+            if (!userName) {
+                const name = prompt('Enter your name for team tracking:');
+                if (name && name.trim()) {
+                    userName = name.trim();
+                    localStorage.setItem('teamMemberName', userName);
+                } else {
+                    userName = 'Anonymous';
+                }
+            }
+            userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            setupPresence();
+            setupCheckboxes();
+        }
+        
+        function setupPresence() {
+            const presenceRef = database.ref('presence/' + userId);
+            database.ref('.info/connected').on('value', snap => {
+                if (snap.val()) {
+                    presenceRef.set({name: userName, timestamp: firebase.database.ServerValue.TIMESTAMP});
+                    presenceRef.onDisconnect().remove();
+                }
+            });
+            
+            // Show online users in header
+            database.ref('presence').on('value', snapshot => {
+                const users = snapshot.val() || {};
+                const userNames = Object.values(users).map(u => u.name);
+                const userInfo = document.getElementById('user-info');
+                if (userInfo) {
+                    userInfo.innerHTML = '🟢 Online: ' + userNames.join(', ');
+                }
+            });
+        }
+        
+        function setupCheckboxes() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            
+            // Load states from Firebase
+            database.ref('checkboxes').on('value', snapshot => {
+                const data = snapshot.val() || {};
+                checkboxes.forEach((checkbox, index) => {
+                    const itemData = data['item_' + index];
+                    if (itemData) {
+                        checkbox.checked = itemData.checked;
+                        const parent = checkbox.parentElement;
+                        if (itemData.checked) {
+                            parent.classList.add('checked');
+                            // Add who/when info
+                            let metaSpan = parent.querySelector('.item-meta');
+                            if (!metaSpan) {
+                                metaSpan = document.createElement('span');
+                                metaSpan.className = 'item-meta';
+                                parent.appendChild(metaSpan);
+                            }
+                            const date = new Date(itemData.timestamp);
+                            metaSpan.textContent = `✓ ${itemData.by} (${date.toLocaleDateString()})`;
+                        } else {
+                            parent.classList.remove('checked');
+                            const metaSpan = parent.querySelector('.item-meta');
+                            if (metaSpan) metaSpan.remove();
+                        }
+                    }
+                });
+                updateProgress();
+            });
+            
+            // Add change listeners
+            checkboxes.forEach((checkbox, index) => {
+                checkbox.addEventListener('change', function() {
+                    const itemId = 'item_' + index;
+                    if (this.checked) {
+                        database.ref('checkboxes/' + itemId).set({
+                            checked: true,
+                            by: userName,
+                            timestamp: firebase.database.ServerValue.TIMESTAMP
+                        });
+                    } else {
+                        database.ref('checkboxes/' + itemId).remove();
+                    }
+                });
+            });
+        }
+        
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const total = checkboxes.length;
+            const percentage = Math.round((checked / total) * 100);
+            
+            const progressText = document.getElementById('progress-text');
+            if (progressText) {
+                progressText.textContent = `Progress: ${checked} of ${total} items completed (${percentage}%)`;
+            }
+            
+            const progressBar = document.getElementById('progress-bar');
+            if (progressBar) {
+                progressBar.style.width = percentage + '%';
+                progressBar.textContent = percentage > 5 ? percentage + '%' : '';
+            }
+        }
+        
+        function resetAllCheckboxes() {
+            if (!confirm('⚠️ Reset ALL checkboxes for THE ENTIRE TEAM? This cannot be undone!')) return;
+            if (!confirm('Really reset everything? Last chance!')) return;
+            database.ref('checkboxes').remove();
+        }
+        
+        function exportProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            let completedItems = [];
+            let pendingItems = [];
+            
+            checkboxes.forEach(checkbox => {
+                const label = checkbox.parentElement.textContent.replace(/✓.*$/, '').trim();
+                if (checkbox.checked) {
+                    const meta = checkbox.parentElement.querySelector('.item-meta');
+                    const metaText = meta ? meta.textContent : '';
+                    completedItems.push(`✓ ${label} ${metaText}`);
+                } else {
+                    pendingItems.push(`☐ ${label}`);
+                }
+            });
+            
+            const exportText = `ABC CMC 2026 - Team Edmund & Fitz Progress
+Generated: ${new Date().toLocaleString()}
+
+COMPLETED (${completedItems.length}):
+${completedItems.join('\n')}
+
+PENDING (${pendingItems.length}):
+${pendingItems.join('\n')}`;
+            
+            const blob = new Blob([exportText], {type: 'text/plain'});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Team_Progress_' + new Date().toISOString().split('T')[0] + '.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+        
+        function clearAllCheckboxes() { resetAllCheckboxes(); }
+    </script>
+    
+    <!-- Progress Bar and Controls -->
+    <div style="position: sticky; top: 0; z-index: 1000; background-color: white; padding: 15px; border-bottom: 3px solid #003087; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div>
+                <h2 style="margin: 0; color: #003087;">📋 ABC CMC 2026 - Team Checklist</h2>
+                <div id="user-info" style="font-size: 0.9em; color: #28a745; margin-top: 5px;">🟢 Connecting...</div>
+            </div>
+            <div>
+                <button onclick="exportProgress()" style="background-color: #0055a4; color: white; border: none; padding: 10px 20px; margin-right: 10px; cursor: pointer; border-radius: 5px; font-size: 14px;">
+                    📥 Export Progress
+                </button>
+                <button onclick="resetAllCheckboxes()" style="background-color: #e31c3d; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-size: 14px;">
+                    🔄 Reset All
+                </button>
+            </div>
+        </div>
+        <div id="progress-text" style="font-weight: bold; margin-bottom: 5px; color: #003087;">Progress: 0 of 0 items completed (0%)</div>
+        <div style="width: 100%; background-color: #e8f0fe; border-radius: 10px; overflow: hidden; height: 25px;">
+            <div id="progress-bar" style="width: 0%; background: linear-gradient(90deg, #003087, #0055a4); height: 100%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"></div>
+        </div>
+    </div>
+    
+    <h1>🏗️ ABC CMC 2026 - Complete Master Checklist & Timeline</h1>
+    <p><strong>Project:</strong> Hyatt Regency Salt Lake City, UT | <strong>Competition Dates:</strong> March 18-20, 2026</p>
+    
+    <div style="background-color: #d4edda; border: 2px solid #28a745; padding: 15px; margin: 20px 0; border-radius: 5px;">
+        <h3 style="margin-top: 0; color: #155724;">✨ Team Collaboration Features:</h3>
+        <ul style="margin-bottom: 0;">
+            <li><strong>Real-Time Sync:</strong> When anyone checks a box, everyone sees it instantly</li>
+            <li><strong>Team Tracking:</strong> See WHO completed each item and WHEN</li>
+            <li><strong>Online Status:</strong> See which team members are currently online</li>
+            <li><strong>Shared Progress:</strong> One unified progress bar for the whole team</li>
+            <li><strong>Export Progress:</strong> Download team progress report anytime</li>
+            <li><strong>Always Updated:</strong> Automatically syncs across all devices</li>
+        </ul>
+    </div>
+    
+    
+    <div class="easter-egg">
+        🎬 EASTER EGG REQUIREMENT: Include a clean page at the VERY END of your RFP submission with each team member's "who would play them in a movie" actor/actress. This proves you read the FAQ document!
+    </div>
+
+    <h2>📅 MASTER TIMELINE - ALL KEY DATES</h2>
+    
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-date">Sunday, January 19, 2026</div>
+            <div>RFP Issued to Teams - Step One Commences</div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-date">Monday, January 26, 2026</div>
+            <div><strong>OPTIONAL:</strong> Introduction to ABC Competition Virtual Meeting (Faculty Advisors & Team Captains)</div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-date">Friday, January 30, 2026 - Noon MST</div>
+            <div><strong>OPTIONAL:</strong> Ediphi Q&A Office Hour Session (watch tutorials first!)</div>
+        </div>
+        
+        <div class="timeline-item deadline">
+            <div class="timeline-date">⚠️ Friday, February 2, 2026 - 9:00 PM MST</div>
+            <div><strong>DEADLINE:</strong> Round 1 RFIs Due (up to 5 RFIs)</div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-date">Sunday, February 9, 2026 - 11:00 PM MST</div>
+            <div>Round 1 RFI Answers Released by Committee</div>
+        </div>
+        
+        <div class="timeline-item deadline">
+            <div class="timeline-date">⚠️ Sunday, February 23, 2026 - 9:00 PM MST</div>
+            <div><strong>DEADLINE:</strong> Round 2 RFIs Due (up to 5 RFIs)</div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-date">Sunday, March 2, 2026 - 11:00 PM MST</div>
+            <div>Round 2 RFI Answers Released by Committee</div>
+        </div>
+        
+        <div class="timeline-item deadline">
+            <div class="timeline-date">⚠️ Monday, March 16, 2026 - 9:00 PM MST</div>
+            <div><strong>MAJOR DEADLINE:</strong> Step 1 Electronic Proposal Due via BuildingConnected + Email Confirmation to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a1c0c3c2c2ccc2e1c9c4cfd2c4cdd1c9c4cdd1d28fc2cecc">[email&#160;protected]</a></div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-date">Tuesday, March 17, 2026 - 9:00 AM to 5:00 PM</div>
+            <div>CMC Team Registration Open at Salt Lake City Convention Center</div>
+        </div>
+        
+        <div class="timeline-item deadline">
+            <div class="timeline-date">⚠️ Wednesday, March 18, 2026</div>
+            <div><strong>COMPETITION DAY (Step 2)</strong>
+                <ul>
+                    <li>8:00-9:30 AM: Setup, Registration, Breakfast</li>
+                    <li>9:30-10:00 AM: Welcome Orientation</li>
+                    <li><strong>10:00 AM: Hard Copy Proposals Due to Judges</strong></li>
+                    <li>10:00 AM-3:00 PM: Step 2 Competition Work</li>
+                    <li>5:30-7:00 PM: Opening General Session (attend!)</li>
+                    <li>8:00-11:00 PM: Step 3 Shortlist Announcement (via BuildingConnected - DO NOT contact committee)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="timeline-item deadline">
+            <div class="timeline-date">⚠️ Thursday, March 19, 2026</div>
+            <div><strong>INTERVIEW DAY (Step 3 - If Shortlisted)</strong>
+                <ul>
+                    <li><strong>8:00 AM: USB Presentations Due to IT Table</strong></li>
+                    <li>10:00 AM-4:30 PM: Presentations & Interviews</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-date">Friday, March 20, 2026</div>
+            <div><strong>AWARDS DAY</strong>
+                <ul>
+                    <li>8:15-9:15 AM: Faculty Forum (optional)</li>
+                    <li>9:30-11:00 AM: Project Debrief & Team-Specific Feedback</li>
+                    <li>5:00-7:00 PM: Careers in Construction Awards (Winners Announced - ATTEND!)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h2>💰 CRITICAL ALLOWANCES & SCOPE MODIFICATIONS</h2>
+    
+    <div class="allowance">
+        <strong>ALLOWANCE #1:</strong> $200,000 for Owner-handled Building Permits and Associated Fees
+        <br>Include in: Base Estimate, Schedule, Proposal
+    </div>
+    
+    <div class="allowance">
+        <strong>ALLOWANCE #2:</strong> $5,000,000 for Future Low-Voltage Turnkey Scopes (Telecom, AV, IT, Security, DAS)
+        <br>Include in: Base Estimate, Schedule, Proposal
+        <br>Covers: Equipment, Pathways, Cabling, Labeling
+    </div>
+    
+    <div class="critical">
+        <strong>SCOPE MODIFICATION #1:</strong> Levels 20-25 = SHELL ONLY (Future Build-Out)
+        <ul>
+            <li>✅ INCLUDE: Structure (steel, concrete), Cores (elevators/stairs), Building envelope, Minimum life-safety/MEP for Certificate of Occupancy</li>
+            <li>❌ EXCLUDE: Finishes, Ceilings, Fixtures, Furniture, MEP branch distribution</li>
+        </ul>
+    </div>
+    
+    <div class="critical">
+        <strong>SCOPE MODIFICATION #2:</strong> Site is "Pad Ready"
+        <ul>
+            <li>❌ EXCLUDE: All demolition, Underground utilities, Site leveling/compaction</li>
+            <li>✅ INCLUDE: All foundations, piers, caissons per drawings</li>
+            <li>Assume: Water, sewer, gas, electrical stubbed within building footprint</li>
+        </ul>
+    </div>
+    
+    <div class="critical">
+        <strong>SCOPE MODIFICATION #3:</strong> Kitchen/Laundry/F&B Equipment by Separate Contractor
+        <ul>
+            <li>✅ INCLUDE: Space build-out with finishes, Utility connections</li>
+            <li>📅 INCLUDE IN SCHEDULE: 12-week duration for separate contractor</li>
+        </ul>
+    </div>
+    
+    <div class="critical">
+        <strong>SCOPE MODIFICATION #4:</strong> Guestroom Furniture & Artwork by Owner
+        <ul>
+            <li>Create OFCI (Owner Furnished Contractor Installed) as <strong>ADD ALTERNATE ONLY</strong></li>
+            <li>List pricing <strong>OUTSIDE of Base Estimate</strong></li>
+        </ul>
+    </div>
+
+    <h2>⚡ TIPS FROM THE CMC COMMITTEE (From FAQ Document)</h2>
+    
+    <div class="tip">
+        <strong>TIP #1:</strong> Read and follow the RFP exactly. If it specifies a format, font, or requirement, there's probably scoring criteria tied to it. Make a checklist! ✓
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #2:</strong> Reach out to your local ABC Chapter for help finding contractors willing to provide feedback and mentoring. They can't do the work for you, but they can review it.
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #3:</strong> Reach out to alumni and faculty for peer reviews and feedback.
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #4:</strong> Step 1 proposal can be worked on by active ABC Student Chapter members beyond your 4-person team! However, Step 2 & 3 are solely the 4-person team's responsibility.
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #5:</strong> Meet with local contractors to review their actual RFP responses for inspiration on format and quality.
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #6:</strong> Be cautious of internet research. Public cost/schedule data may not reflect the RFP-specific scope changes and will likely lead you astray.
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #7:</strong> Your team is a "company." Get creative! Create a company name, logo, team resumes/experience, portfolio. Have fun with it.
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #8:</strong> Develop boilerplate drafts early and get multiple peer reviews done well before deadline.
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #9:</strong> Don't use canned Safety/QC plans from the internet, AI, or another company. Don't just reuse last year's submission. Make it specific to THIS project and better overall.
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #10:</strong> When the RFP says "but not limited to..." that's code for: "Put some thought into this and include additional items beyond what's listed here."
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #11:</strong> Think outside the box. Top safety risks don't have to be OSHA's Fatal Four. Consider a daycare across the street full of kids - how will you mitigate THAT risk?
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #12:</strong> Begin with the end in mind. Come planning to shortlist and present. Have your Step 3 presentation at least STARTED before you arrive. If you make the cut, you'll be prepared and ahead of others.
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #14:</strong> Rehearse your presentation in front of peers, contractors, anyone who can give feedback and grill you with questions. Can't find someone? Contact your ABC Chapter liaison or the CMC Committee for help.
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #15:</strong> If possible, have someone from 2027's team shadow you this year. Start planning for next year NOW.
+    </div>
+    
+    <div class="tip">
+        <strong>TIP #16:</strong> Teams that don't make the Step 3 shortlist should attend the interviews anyway. This provides ideas for improvement and insight into the interview process.
+    </div>
+
+    <h2>📋 COMPLETE CHECKLIST</h2>
+
+    <h3>1. INITIAL SETUP & REGISTRATION</h3>
+    
+    <h4>Team Formation</h4>
+    <div class="checklist-item"><input type="checkbox"> Assemble 4-person competition team</div>
+    <div class="checklist-item"><input type="checkbox"> Identify Team Captain</div>
+    <div class="checklist-item"><input type="checkbox"> Identify Co-Captain</div>
+    <div class="checklist-item"><input type="checkbox"> Optional: Select up to 2 alternates (max)</div>
+    <div class="checklist-item"><input type="checkbox"> Identify Faculty Advisor or ABC chapter staff/member</div>
+    <div class="checklist-item"><input type="checkbox"> Reach out to local ABC Chapter for contractor mentoring connections</div>
+    <div class="checklist-item"><input type="checkbox"> Reach out to alumni for feedback and peer review</div>
+    <div class="checklist-item"><input type="checkbox"> Reach out to faculty for peer review</div>
+    <div class="checklist-item"><input type="checkbox"> Recruit additional ABC Student Chapter members to help with Step 1 work</div>
+    <div class="checklist-item"><input type="checkbox"> Optional: Recruit 2027 team member to shadow this year's team</div>
+    
+    <h4>Registration & Confirmation</h4>
+    <div class="checklist-item deadline"><input type="checkbox"> Email Team Captain & Co-Captain info to Amanda Fry (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c8a9aaababa5ab88a0ada6bbada4b8a0ada4b8bbe6aba7a5">[email&#160;protected]</a>)</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Email Team Captain & Co-Captain info to Haley Moyers (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3f5250465a4d4c7f5e5d5c11504d58">[email&#160;protected]</a>)</div>
+    <div class="checklist-item"><input type="checkbox"> Include: school name, contact name, phone number, email address</div>
+    
+    <h4>Software & Document Access</h4>
+    <div class="checklist-item"><input type="checkbox"> Gain access to BuildingConnected platform</div>
+    <div class="checklist-item"><input type="checkbox"> Download ALL RFP documents from BuildingConnected</div>
+    <div class="checklist-item"><input type="checkbox"> Retain downloaded documents for Step 2 use</div>
+    <div class="checklist-item"><input type="checkbox"> Request Ediphi access via BuildingConnected (list team member names & emails)</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Verify Ediphi access received by Friday, Jan 30, 2026</div>
+    <div class="checklist-item"><input type="checkbox"> If no Ediphi access by Jan 30: Contact <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="eb989e9b9b84999fab8e8f829b8382c5888486">[email&#160;protected]</a> and CC <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1a7775637f68695a7b78793475687d">[email&#160;protected]</a></div>
+    <div class="checklist-item"><input type="checkbox"> Watch Ediphi tutorial videos</div>
+    <div class="checklist-item"><input type="checkbox"> Optional: Attend Ediphi Q&A Office Hour (Friday Jan 30, Noon MST)</div>
+    
+    <h4>Document Inventory Verification</h4>
+    <div class="checklist-item"><input type="checkbox"> 2026 ABC Student Chapter Construction Management Competition RFP.pdf</div>
+    <div class="checklist-item"><input type="checkbox"> Salt Lake City Hotel – Drawings</div>
+    <div class="checklist-item"><input type="checkbox"> Salt Lake City Hotel – Specifications</div>
+    <div class="checklist-item"><input type="checkbox"> Exhibit A.1 – Bid Form CSI Summary.xlsx</div>
+    <div class="checklist-item"><input type="checkbox"> Exhibit A.2 – Bid Form Uniformat Summary.xlsx</div>
+    <div class="checklist-item"><input type="checkbox"> Exhibit B – General Conditions.xlsx</div>
+    <div class="checklist-item"><input type="checkbox"> Exhibit C – Submittal and Delivery Register.xlsx</div>
+    <div class="checklist-item"><input type="checkbox"> Exhibit D.1 – Schedule Milestones.xlsx</div>
+    <div class="checklist-item"><input type="checkbox"> Exhibit D.2 – SIPS Schedule</div>
+    <div class="checklist-item"><input type="checkbox"> Exhibit D.3 – Sample Gantt Chart.pdf</div>
+    <div class="checklist-item"><input type="checkbox"> Exhibit E – AHA.xlsx</div>
+    <div class="checklist-item"><input type="checkbox"> Exhibit F – Incident Report.docx</div>
+    <div class="checklist-item"><input type="checkbox"> CMC RFI Form – Blank Template.xls</div>
+    <div class="checklist-item"><input type="checkbox"> 2026 Proposal Binder Tab List.pdf</div>
+
+    <h3>2. COMPANY BRANDING & IDENTITY</h3>
+    <div class="checklist-item"><input type="checkbox"> Create creative company name for your GC firm</div>
+    <div class="checklist-item"><input type="checkbox"> Design company logo</div>
+    <div class="checklist-item"><input type="checkbox"> Develop team member resumes/experience</div>
+    <div class="checklist-item"><input type="checkbox"> Create company portfolio</div>
+    <div class="checklist-item"><input type="checkbox"> Have fun with branding and make it memorable!</div>
+
+    <h3>3. PROJECT UNDERSTANDING</h3>
+    
+    <h4>Scope Modifications (CRITICAL - Override Drawings/Specs)</h4>
+    <div class="checklist-item critical"><input type="checkbox"> Understand: Levels 20-25 = SHELL ONLY (structure, cores, envelope, min MEP)</div>
+    <div class="checklist-item critical"><input type="checkbox"> EXCLUDE from Levels 20-25: finishes, ceilings, fixtures, furniture, MEP branch</div>
+    <div class="checklist-item critical"><input type="checkbox"> Understand: Site is "pad ready" - NO demo or underground utilities by GC</div>
+    <div class="checklist-item critical"><input type="checkbox"> INCLUDE: All foundations, piers, caissons per drawings</div>
+    <div class="checklist-item critical"><input type="checkbox"> Understand: Kitchen/Laundry/F&B Equipment by separate contractor</div>
+    <div class="checklist-item critical"><input type="checkbox"> INCLUDE: Kitchen space finishes and utility connections</div>
+    <div class="checklist-item critical"><input type="checkbox"> INCLUDE in schedule: 12 weeks for separate contractor work</div>
+    <div class="checklist-item critical"><input type="checkbox"> Understand: Guestroom Furniture/Artwork = ADD ALTERNATE only (OFCI)</div>
+    <div class="checklist-item critical"><input type="checkbox"> Price OFCI OUTSIDE of Base Estimate</div>
+    <div class="checklist-item critical"><input type="checkbox"> INCLUDE: $5M allowance for low-voltage turnkey (Telecom/AV/IT/Security/DAS)</div>
+    <div class="checklist-item critical"><input type="checkbox"> INCLUDE: $200K allowance for Owner's building permit fees</div>
+    
+    <h4>General Estimate Assumptions</h4>
+    <div class="checklist-item"><input type="checkbox"> Builder's Risk by Owner - EXCLUDE from estimate</div>
+    <div class="checklist-item"><input type="checkbox"> All temporary utilities by Contractor - INCLUDE</div>
+    <div class="checklist-item"><input type="checkbox"> All hoisting (material & personnel) by Contractor - INCLUDE</div>
+
+    <h3>4. RFI SUBMISSIONS</h3>
+    
+    <h4>Round 1 RFIs</h4>
+    <div class="checklist-item"><input type="checkbox"> Prepare up to 5 RFIs using CMC RFI Form template</div>
+    <div class="checklist-item"><input type="checkbox"> Submit via BuildingConnected message</div>
+    <div class="checklist-item"><input type="checkbox"> Subject: "Team's School Name: RFI Round 1– 2026 ABC CMC"</div>
+    <div class="checklist-item deadline"><input type="checkbox"> <strong>DUE: Friday, Feb 2, 2026 by 9:00 PM MST</strong></div>
+    <div class="checklist-item"><input type="checkbox"> Review responses (expected Feb 9 by 11:00 PM MST)</div>
+    
+    <h4>Round 2 RFIs</h4>
+    <div class="checklist-item"><input type="checkbox"> Prepare up to 5 RFIs using CMC RFI Form template</div>
+    <div class="checklist-item"><input type="checkbox"> Submit via BuildingConnected message</div>
+    <div class="checklist-item"><input type="checkbox"> Subject: "Team's School Name: RFI Round 2– 2026 ABC CMC"</div>
+    <div class="checklist-item deadline"><input type="checkbox"> <strong>DUE: Sunday, Feb 23, 2026 by 9:00 PM MST</strong></div>
+    <div class="checklist-item"><input type="checkbox"> Review responses (expected Mar 2 by 11:00 PM MST)</div>
+
+    <h3>5. STEP 1 - SECTION I: COVER LETTER</h3>
+    <div class="checklist-item"><input type="checkbox"> Address to: Ms. Amanda Fry, ABC, 7200 S. Alton Way Suite B-200, Centennial CO 80112</div>
+    <div class="checklist-item"><input type="checkbox"> Summarize overall project cost</div>
+    <div class="checklist-item"><input type="checkbox"> State anticipated substantial completion date</div>
+    <div class="checklist-item"><input type="checkbox"> List local ABC representative name and contact info</div>
+    <div class="checklist-item"><input type="checkbox"> Include 'guarantee certification of proposal' statement</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Sign in BLUE INK by Project Executive</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Sign in BLUE INK by local ABC Representative</div>
+    <div class="checklist-item"><input type="checkbox"> Limit to ONE (1) page</div>
+    <div class="checklist-item"><input type="checkbox"> Get peer review from contractors/alumni</div>
+
+    <h3>6. STEP 1 - SECTION II: ESTIMATE</h3>
+    
+    <h4>Bid Forms & Summaries</h4>
+    <div class="checklist-item"><input type="checkbox"> Use 2026 Ediphi Cost Data for all pricing (unless quotes provided)</div>
+    <div class="checklist-item"><input type="checkbox"> Export Exhibit A.1 (CSI Summary) from Ediphi to Excel</div>
+    <div class="checklist-item"><input type="checkbox"> Export Exhibit A.2 (Uniformat Summary) from Ediphi to Excel</div>
+    <div class="checklist-item"><input type="checkbox"> Verify exports match provided templates</div>
+    <div class="checklist-item"><input type="checkbox"> Include: General Conditions (from Exhibit B)</div>
+    <div class="checklist-item"><input type="checkbox"> Include: Indirect Costs and Reserves</div>
+    <div class="checklist-item"><input type="checkbox"> Include: Fee</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Upload native Excel A.1 file (School Name_Company Name_Exhibit A1,CSI Summary_STEP 1_03.16.26)</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Upload native Excel A.2 file (School Name_Company Name_Exhibit A2,Uniformat Summary_STEP 1_03.16.26)</div>
+    
+    <h4>General Conditions (Exhibit B)</h4>
+    <div class="checklist-item"><input type="checkbox"> Use Exhibit B template (DO NOT manipulate form)</div>
+    <div class="checklist-item"><input type="checkbox"> Price only items pertinent to THIS project</div>
+    <div class="checklist-item"><input type="checkbox"> Ensure completeness of GC estimate</div>
+    <div class="checklist-item"><input type="checkbox"> Think beyond the provided list ("but not limited to" = add more!)</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Upload native Excel file (School Name_Company Name_Exhibit B,Gen Conditions_STEP 1_03.16.26)</div>
+    
+    <h4>Clarifications & Assumptions</h4>
+    <div class="checklist-item"><input type="checkbox"> Organize by CSI Division</div>
+    <div class="checklist-item"><input type="checkbox"> Acknowledge documents used for proposal</div>
+    <div class="checklist-item"><input type="checkbox"> State jobsite work hours</div>
+    <div class="checklist-item"><input type="checkbox"> List included scope/costs (by Contractor)</div>
+    <div class="checklist-item"><input type="checkbox"> List excluded scope/costs (by Others)</div>
+    <div class="checklist-item"><input type="checkbox"> Document assumptions for items not in Ediphi</div>
+    <div class="checklist-item"><input type="checkbox"> Optional: Include detailed backup for Exhibit A.2 costs</div>
+    <div class="checklist-item"><input type="checkbox"> Verify scope aligns with RFP + RFI responses</div>
+    <div class="checklist-item"><input type="checkbox"> Don't exclude required scope</div>
+    <div class="checklist-item"><input type="checkbox"> Don't include scope outside RFP</div>
+    <div class="checklist-item"><input type="checkbox"> Get peer review from contractors</div>
+
+    <h3>7. STEP 1 - SECTION III: PROJECT MANAGEMENT</h3>
+    
+    <h4>Project Management Narrative (8 pages max, 12pt single-spaced)</h4>
+    <div class="checklist-item"><input type="checkbox"> Get boilerplate draft done early for peer reviews</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1a.</strong> Describe 3+ similar past projects with size/complexity</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1a.</strong> Explain how experience applies to THIS project</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1b.</strong> Plan to meet/exceed 10% MWDVBE participation goal</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1b.</strong> Detail procurement steps</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1c.</strong> Identify self-performed work (min 7% excluding fee/GC)</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1c.</strong> Detail work scope</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1c.</strong> Explain qualifications for self-perform</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1c.</strong> Explain strategic benefit</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1d.</strong> Discuss business practices/processes</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1d.</strong> Identify innovations/technology for success</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1e.</strong> BIM software experience & proposed use</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1e.</strong> AI capabilities experience & proposed use</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1e.</strong> Robotics experience & proposed use</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1e.</strong> Drones experience & proposed use</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1e.</strong> List technology costs as separate breakout in estimate</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1f.</strong> Select 3 high-risk scopes</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1f.</strong> For each: Detail prework → commissioning steps</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1f.</strong> For each: Explain significance to success</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1f.</strong> For each: Identify key risks</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1f.</strong> For each: Explain mitigation plan</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1g.</strong> Strategy to minimize Tariff impacts</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1g.</strong> Strategy to minimize material escalation</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1h.</strong> Logistics plan for adjacent historic structures</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1h.</strong> Staging strategy</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1h.</strong> Pedestrian walkway safety analysis</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1h.</strong> Pedestrian routing plan</div>
+    <div class="checklist-item"><input type="checkbox"> Graphics/charts/visuals encouraged (don't count toward page limit)</div>
+    <div class="checklist-item"><input type="checkbox"> Get multiple peer reviews from contractors/faculty</div>
+    
+    <h4>Organizational Chart</h4>
+    <div class="checklist-item"><input type="checkbox"> List all key staff by name</div>
+    <div class="checklist-item"><input type="checkbox"> Project man-months for each position</div>
+    <div class="checklist-item"><input type="checkbox"> Include staff beyond presenting team if needed</div>
+    <div class="checklist-item"><input type="checkbox"> Provide job descriptions for ALL positions</div>
+    <div class="checklist-item critical"><input type="checkbox"> Designate full-time Project Manager (separate person)</div>
+    <div class="checklist-item critical"><input type="checkbox"> Designate full-time Superintendent (separate person)</div>
+    <div class="checklist-item critical"><input type="checkbox"> Designate full-time Safety Manager (separate person)</div>
+    <div class="checklist-item critical"><input type="checkbox"> Confirm PM/Super/Safety onsite while work performed</div>
+    
+    <h4>Site Utilization Plans (Minimum 2 Phases)</h4>
+    <div class="checklist-item"><input type="checkbox"> <strong>Phase 1: Job Start-up</strong> - Create detailed plan showing:</div>
+    <div class="checklist-item"><input type="checkbox"> - Site Access/Egress</div>
+    <div class="checklist-item"><input type="checkbox"> - Security</div>
+    <div class="checklist-item"><input type="checkbox"> - Material Staging/Laydown</div>
+    <div class="checklist-item"><input type="checkbox"> - Crane(s): type, location, swing radius</div>
+    <div class="checklist-item"><input type="checkbox"> - Man/Material Hoists</div>
+    <div class="checklist-item"><input type="checkbox"> - Temporary Facilities (porta-johns, dumpsters)</div>
+    <div class="checklist-item"><input type="checkbox"> - Trade Partner/Owner/GC Parking</div>
+    <div class="checklist-item"><input type="checkbox"> - Delivery Routing</div>
+    <div class="checklist-item"><input type="checkbox"> - Site Limits</div>
+    <div class="checklist-item"><input type="checkbox"> - Temporary Utilities</div>
+    <div class="checklist-item"><input type="checkbox"> - Protection of existing structures</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>Phase 2: End of Structural Steel</strong> - Create updated plan with same elements</div>
+    
+    <h4>Schedule Narrative</h4>
+    <div class="checklist-item"><input type="checkbox"> <strong>3a.</strong> Aggressive start approach</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3a.</strong> Pre-work submittals</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3a.</strong> Early release deliveries</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3a.</strong> Site organization & temp facilities</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3a.</strong> Coordination with other Owner contractors</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3b.</strong> Identify 4 high-risk features impacting completion/Owner/User/Public</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3b.</strong> Mitigation plan for each</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3c.</strong> 3 most important work sequences</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3c.</strong> Why important</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3c.</strong> How managed</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3d.</strong> Scheduling capabilities/procedures</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3d.</strong> Update process</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3d.</strong> Change incorporation</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3d.</strong> Contractor coordination</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3d.</strong> Steps to maintain completion date</div>
+
+    <h4>CPM Schedule Requirements</h4>
+    <div class="checklist-item"><input type="checkbox"> Overall duration NTP → Final Completion</div>
+    <div class="checklist-item"><input type="checkbox"> Target: Not to exceed 1095 calendar days</div>
+    <div class="checklist-item"><input type="checkbox"> Consider shorter if realistic/achievable/safe/quality maintained</div>
+    <div class="checklist-item"><input type="checkbox"> Include sufficient activity detail</div>
+    <div class="checklist-item"><input type="checkbox"> Organize using WBS (Work Breakdown Structures)</div>
+    <div class="checklist-item"><input type="checkbox"> Start with Milestone Summary</div>
+    <div class="checklist-item"><input type="checkbox"> Follow with sectors/areas of work</div>
+    <div class="checklist-item"><input type="checkbox"> Sort by Early Start, then Total Float</div>
+    
+    <h4>Full Gantt Chart (Exhibit D format)</h4>
+    <div class="checklist-item"><input type="checkbox"> Activity ID</div>
+    <div class="checklist-item"><input type="checkbox"> Activity Description</div>
+    <div class="checklist-item"><input type="checkbox"> Original Duration</div>
+    <div class="checklist-item"><input type="checkbox"> Early Start</div>
+    <div class="checklist-item"><input type="checkbox"> Early Finish</div>
+    <div class="checklist-item"><input type="checkbox"> Total Float</div>
+    <div class="checklist-item"><input type="checkbox"> Early Bars</div>
+    <div class="checklist-item"><input type="checkbox"> Precedence Relationships</div>
+    
+    <h4>Critical Path Gantt Chart</h4>
+    <div class="checklist-item"><input type="checkbox"> Create separate chart: ONLY Critical Path activities</div>
+    <div class="checklist-item"><input type="checkbox"> Same organization as full Gantt</div>
+    
+    <h4>Project Milestones (Exhibit D.1)</h4>
+    <div class="checklist-item"><input type="checkbox"> 1. Bid Date: 03/16/26</div>
+    <div class="checklist-item"><input type="checkbox"> 2. Project Team Interviews: 03/19/26</div>
+    <div class="checklist-item"><input type="checkbox"> 3. Notice of Award: 03/20/26</div>
+    <div class="checklist-item"><input type="checkbox"> 4. Notice to Proceed: 04/20/26</div>
+    <div class="checklist-item"><input type="checkbox"> 5. Building Permit Received: 06/20/26</div>
+    <div class="checklist-item"><input type="checkbox"> 6. Mobilization: TBD (determine)</div>
+    <div class="checklist-item"><input type="checkbox"> 7. Substantial Completion: TBD (determine)</div>
+    <div class="checklist-item"><input type="checkbox"> 8. Final Completion: TBD (determine)</div>
+    <div class="checklist-item"><input type="checkbox"> 9. Fire Alarm & Testing Complete: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 10. Elevators Functional: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 11. Owner Kit/F&B/Laundry install start: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 12. Complete Foundations: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 13. Start Auger Piles: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 14. Tower Crane Removal: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 15. Exterior Skin Complete (Dried In): TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 16. Start Commissioning: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 17. Energize Permanent Power: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 18. Start Guest Room Buildout: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 19. Delivery Electrical Gear: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 20. Complete Structural Steel: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 21. Start Owner Furniture (Guest Rooms): TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 22. Start Owner Furniture (Non-Guest): TBD</div>
+    <div class="checklist-item"><input type="checkbox"> 23-25. Add 3 GC-selected milestones: TBD</div>
+    <div class="checklist-item"><input type="checkbox"> Mark which milestones are on Critical Path</div>
+    
+    <h4>SIPS Schedule (Exhibit D.2)</h4>
+    <div class="checklist-item"><input type="checkbox"> Create Short Interval Production Schedule for Guest Rooms</div>
+    <div class="checklist-item"><input type="checkbox"> Show durations</div>
+    <div class="checklist-item"><input type="checkbox"> Show flow/sequencing</div>
+    <div class="checklist-item"><input type="checkbox"> Complement CPM activities</div>
+    
+    <h4>Exterior Glazing Sequence</h4>
+    <div class="checklist-item"><input type="checkbox"> Create colored sequence map for window wall</div>
+    <div class="checklist-item"><input type="checkbox"> Create colored sequence map for curtain wall glazing</div>
+    <div class="checklist-item"><input type="checkbox"> Show install dates</div>
+    <div class="checklist-item"><input type="checkbox"> Show "come-back" dates for gaps</div>
+    <div class="checklist-item"><input type="checkbox"> List equipment for glass setting</div>
+    
+    <h4>Long Lead Items (Exhibit C)</h4>
+    <div class="checklist-item"><input type="checkbox"> Identify minimum 7 longest lead/early install items</div>
+    <div class="checklist-item"><input type="checkbox"> For each: Date delivery required</div>
+    <div class="checklist-item"><input type="checkbox"> For each: Fabrication lead time</div>
+    <div class="checklist-item"><input type="checkbox"> For each: Shipping lead time</div>
+    <div class="checklist-item"><input type="checkbox"> Show backwards pass for design coordination</div>
+
+    <h3>8. STEP 1 - SECTION IV: QUALITY CONTROL</h3>
+    
+    <h4>QC Narrative (5 pages max, 12pt single-spaced)</h4>
+    <div class="checklist-item"><input type="checkbox"> Don't use canned QC plans - make project-specific!</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1.</strong> Overall quality record/performance</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>2i.</strong> Quality Control Policy</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>2ii.</strong> QC Team Members & responsibilities</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>2iii.</strong> Interface with AHJ</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>2iv.</strong> Testing Standards/Methods</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>2v.</strong> Commissioning/Start-Up Plan (steps, timing, equipment/systems)</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>2vi.</strong> 3 Example Forms (don't count toward pages):</div>
+    <div class="checklist-item"><input type="checkbox"> - Concrete Piers inspection form</div>
+    <div class="checklist-item"><input type="checkbox"> - Flashing/water sealants at exterior glazing form</div>
+    <div class="checklist-item"><input type="checkbox"> - Chiller protection/install form</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>2vii.</strong> Water Infiltration Mitigation Plan</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>2viii.</strong> Software/procedures for tracking deficiencies/work/punch list</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>2ix.</strong> Quality Awards Program</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>2x.</strong> Warranty Management Plan</div>
+    <div class="checklist-item"><input type="checkbox"> Graphics/visuals encouraged (don't count toward pages)</div>
+    <div class="checklist-item"><input type="checkbox"> Get peer reviews from contractors</div>
+    
+    <h4>QC Flow Chart</h4>
+    <div class="checklist-item"><input type="checkbox"> Create detailed flow chart: Procurement → Final Inspection</div>
+    <div class="checklist-item"><input type="checkbox"> Confirm doesn't count toward page limit</div>
+
+    <h3>9. STEP 1 - SECTION V: SAFETY</h3>
+    
+    <h4>Safety Narrative (8 pages max, 12pt single-spaced)</h4>
+    <div class="checklist-item"><input type="checkbox"> Don't use canned Safety plans - make project-specific!</div>
+    <div class="checklist-item"><input type="checkbox"> Think outside the box (not just OSHA Fatal Four!)</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>1.</strong> Safety/Health Indoctrination</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>2.</strong> Safety/Health Enforcement</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>3.</strong> Correcting Violations</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>4.</strong> Safety Awards Program</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>5.</strong> Mental Health Program (staff & trade partners)</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>5.</strong> Create 1-sheet promotional poster for jobsite (doesn't count toward pages)</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>6.</strong> Accident Investigation</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>7.</strong> Cold Weather Policies</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>8.</strong> Electrical Hazards</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>9.</strong> Lock-out/Tag-out</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>10.</strong> Fall Hazards</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>11.</strong> Struck-by Hazards</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>12.</strong> Caught-In/Caught-Between Hazards</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>13.</strong> Substance Abuse</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>14.</strong> Training</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>15.</strong> Minimum PPE Requirements</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>16.</strong> Tool/Equipment Inspection</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>17.</strong> Fire Prevention/Protection</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>18.</strong> Hot Work Permit Process</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>19.</strong> Dig Permit Process</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>20.</strong> Housekeeping</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>21.</strong> Internal/External Auditing</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>22.</strong> External safety programs (STEP, VPP, etc.)</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>c.</strong> Top 4 significant hazards/risks (think beyond OSHA!)</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>c.</strong> Prevention measures for each</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>d.</strong> Public Hazard Plan for pedestrians/Convention Center</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>e.</strong> Full-time Safety Manager credentials</div>
+    <div class="checklist-item"><input type="checkbox"> <strong>e.</strong> Day-to-day responsibilities</div>
+    <div class="checklist-item"><input type="checkbox"> Graphics/AHAs/poster don't count toward pages</div>
+    <div class="checklist-item"><input type="checkbox"> Get peer reviews from contractors</div>
+    
+    <h4>Safety Supporting Documents</h4>
+    <div class="checklist-item"><input type="checkbox"> Complete AHA using Exhibit E template (doesn't count toward pages)</div>
+    <div class="checklist-item"><input type="checkbox"> Emergency Action Plan/Map with:</div>
+    <div class="checklist-item"><input type="checkbox"> - Organizational responsibilities & contacts</div>
+    <div class="checklist-item"><input type="checkbox"> - Preparation steps</div>
+    <div class="checklist-item"><input type="checkbox"> - What enacts plan</div>
+    <div class="checklist-item"><input type="checkbox"> - How workers know it's enacted</div>
+    <div class="checklist-item"><input type="checkbox"> - Emergency operational plans</div>
+    <div class="checklist-item"><input type="checkbox"> - Emergency phone numbers</div>
+    <div class="checklist-item"><input type="checkbox"> - Fire/ambulance routes</div>
+    <div class="checklist-item"><input type="checkbox"> - Muster points</div>
+    <div class="checklist-item"><input type="checkbox"> - AED/First Aid locations</div>
+    <div class="checklist-item"><input type="checkbox"> - Gate responsibilities</div>
+    <div class="checklist-item"><input type="checkbox"> - Other Life Safety protocols</div>
+    <div class="checklist-item"><input type="checkbox"> Note: Different from Site Utilization Plan!</div>
+    <div class="checklist-item"><input type="checkbox"> Complete Incident Report using Exhibit F & scenario (doesn't count toward pages)</div>
+
+    <h3>10. STEP 1 SUBMISSION</h3>
+    
+    <h4>Pre-Submission Quality Checks</h4>
+    <div class="checklist-item"><input type="checkbox"> Get multiple peer reviews from contractors on entire proposal</div>
+    <div class="checklist-item"><input type="checkbox"> Meet with local contractors to compare to their actual RFPs</div>
+    <div class="checklist-item"><input type="checkbox"> Get faculty review</div>
+    <div class="checklist-item"><input type="checkbox"> Get alumni review</div>
+    <div class="checklist-item"><input type="checkbox"> Verify all requirements met per checklist</div>
+    <div class="checklist-item"><input type="checkbox"> Verify NO canned/copied content from internet/AI/other companies</div>
+    <div class="checklist-item"><input type="checkbox"> Verify all content is project-specific to THIS Hyatt project</div>
+    <div class="checklist-item"><input type="checkbox"> Verify NOT reusing last year's submission</div>
+    
+    <h4>Electronic Submission</h4>
+    <div class="checklist-item"><input type="checkbox"> Compile complete proposal as single PDF</div>
+    <div class="checklist-item"><input type="checkbox"> Label: School Name_Company Name_STEP 1 PROPOSAL_03.16.26</div>
+    <div class="checklist-item critical"><input type="checkbox"> CREATE ELECTRONIC TABS matching hard copy</div>
+    <div class="checklist-item critical"><input type="checkbox"> CREATE BOOKMARKS for easy navigation (REQUIRED - deductions if missing!)</div>
+    <div class="checklist-item"><input type="checkbox"> Verify sections:
+        <ul>
+            <li>Tab I: Cover Letter</li>
+            <li>Tab II: Estimate (A.1, A.2, B, Clarifications)</li>
+            <li>Tab III: Project Management</li>
+            <li>Tab IV: Quality Control</li>
+            <li>Tab V: Safety</li>
+        </ul>
+    </div>
+    <div class="checklist-item critical easter-egg"><input type="checkbox"> ADD FINAL PAGE: Team members' "who would play you in a movie" actors/actresses (EASTER EGG!)</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Upload PDF to BuildingConnected</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Upload Excel A.1 (properly labeled)</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Upload Excel A.2 (properly labeled)</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Upload Excel B (properly labeled)</div>
+    <div class="checklist-item deadline"><input type="checkbox"> Send confirmation email to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e5848786868886a58d808b968089958d80899596cb868a88">[email&#160;protected]</a></div>
+    <div class="checklist-item deadline"><input type="checkbox"> <strong>SUBMIT BY: Monday, March 16, 2026 - 9:00 PM MST</strong></div>
+    
+    <h4>Hard Copy Binder</h4>
+    <div class="checklist-item"><input type="checkbox"> Obtain three-ring binder</div>
+    <div class="checklist-item"><input type="checkbox"> Label exterior: School name + Company name</div>
+    <div class="checklist-item"><input type="checkbox"> Print complete proposal</div>
+    <div class="checklist-item"><input type="checkbox"> Insert tabs using 2026 Proposal Binder Tab List labels</div>
+    <div class="checklist-item"><input type="checkbox"> Verify matches electronic submission</div>
+    <div class="checklist-item"><input type="checkbox"> Bring to Competition Day</div>
+    <div class="checklist-item deadline"><input type="checkbox"> <strong>HAND TO JUDGES: Wednesday, March 18, 2026 - 10:00 AM</strong></div>
+
+    <h3>11. STEP 2 - COMPETITION DAY PREPARATION</h3>
+    
+    <h4>Pre-Competition Day</h4>
+    <div class="checklist-item"><input type="checkbox"> Arrange travel to Salt Lake City</div>
+    <div class="checklist-item"><input type="checkbox"> Book lodging</div>
+    <div class="checklist-item"><input type="checkbox"> Register Tuesday, March 17 (9 AM - 5 PM) if arriving early</div>
+    <div class="checklist-item"><input type="checkbox"> Pack computers</div>
+    <div class="checklist-item"><input type="checkbox"> Pack office supplies</div>
+    <div class="checklist-item"><input type="checkbox"> Pack monitors (optional)</div>
+    <div class="checklist-item"><input type="checkbox"> Pack additional power strips (ABC provides one)</div>
+    <div class="checklist-item"><input type="checkbox"> Pack scales for quantity surveys</div>
+    <div class="checklist-item"><input type="checkbox"> Bring quantity survey software</div>
+    <div class="checklist-item"><input type="checkbox"> Note: NO printers needed (all electronic)</div>
+    <div class="checklist-item"><input type="checkbox"> Review downloaded RFP documents for Step 2 use</div>
+    
+    <h4>Competition Day - Wednesday, March 18</h4>
+    <div class="checklist-item"><input type="checkbox"> Arrive for setup: 8:00-9:30 AM</div>
+    <div class="checklist-item"><input type="checkbox"> Attend Welcome Orientation: 9:30-10:00 AM</div>
+    <div class="checklist-item deadline"><input type="checkbox"> <strong>Submit hard copy binders: 10:00 AM</strong></div>
+    <div class="checklist-item"><input type="checkbox"> Receive Step 2 instructions via BuildingConnected</div>
+    <div class="checklist-item"><input type="checkbox"> Complete Step 2 work</div>
+    <div class="checklist-item"><input type="checkbox"> Format Step 2 electronically (labeled, tabbed, bookmarked)</div>
+    <div class="checklist-item"><input type="checkbox"> Submit Step 2 by deadline</div>
+    <div class="checklist-item"><input type="checkbox"> Return ABC power strips</div>
+    <div class="checklist-item"><input type="checkbox"> Attend Opening General Session: 5:30-7:00 PM</div>
+    <div class="checklist-item"><input type="checkbox"> Check BuildingConnected for shortlist: 8:00-11:00 PM</div>
+    <div class="checklist-item critical"><input type="checkbox"> DO NOT contact CMC Staff/Committee/Judges before 11:00 PM!</div>
+    
+    <h4>Alternates (if applicable)</h4>
+    <div class="checklist-item"><input type="checkbox"> Attend Orientation: 9:30 AM</div>
+    <div class="checklist-item"><input type="checkbox"> Complete alternate activity as assigned</div>
+
+    <h3>12. STEP 3 - INTERVIEW PREPARATION (Begin BEFORE Arriving!)</h3>
+    
+    <h4>Pre-Convention Prep (CRITICAL TIP!)</h4>
+    <div class="checklist-item critical"><input type="checkbox"> Start presentation BEFORE arriving (assume you'll shortlist!)</div>
+    <div class="checklist-item"><input type="checkbox"> Create 10-15 minute presentation draft</div>
+    <div class="checklist-item"><input type="checkbox"> Rehearse in front of peers</div>
+    <div class="checklist-item"><input type="checkbox"> Rehearse in front of contractors</div>
+    <div class="checklist-item"><input type="checkbox"> Rehearse in front of faculty</div>
+    <div class="checklist-item"><input type="checkbox"> Get grilled with practice questions</div>
+    <div class="checklist-item"><input type="checkbox"> Can't find reviewers? Contact ABC Chapter liaison for help</div>
+    <div class="checklist-item"><input type="checkbox"> Still need help? Contact CMC Committee for industry connections</div>
+    <div class="checklist-item"><input type="checkbox"> Refine presentation based on feedback</div>
+    <div class="checklist-item"><input type="checkbox"> Practice time management (hard stop at time limit!)</div>
+    <div class="checklist-item"><input type="checkbox"> Prepare for Q&A scenarios</div>
+    
+    <h4>If Shortlisted - Final Prep</h4>
+    <div class="checklist-item"><input type="checkbox"> Finalize presentation (10-15 min, final time confirmed with shortlist)</div>
+    <div class="checklist-item"><input type="checkbox"> Save to USB</div>
+    <div class="checklist-item"><input type="checkbox"> Label file: #_Timeslot_School Name_STEP 3 PRESENTATION</div>
+    <div class="checklist-item"><input type="checkbox"> Example: 3_11:00-11:25am_Univ of Colorado_STEP 3 PRESENTATION</div>
+    <div class="checklist-item deadline"><input type="checkbox"> <strong>Deliver USB to IT table by 8:00 AM Thursday, March 19</strong></div>
+    <div class="checklist-item"><input type="checkbox"> Arrive early to interview room</div>
+    <div class="checklist-item"><input type="checkbox"> Optional: Designate alternate to run computer</div>
+    <div class="checklist-item"><input type="checkbox"> Plan for 2-minute warning</div>
+    <div class="checklist-item"><input type="checkbox"> Plan for hard stop</div>
+    <div class="checklist-item"><input type="checkbox"> Prepare for immediate Q&A after presentation</div>
+    
+    <h4>If NOT Shortlisted</h4>
+    <div class="checklist-item"><input type="checkbox"> Attend other teams' interviews for learning/improvement ideas</div>
+    <div class="checklist-item"><input type="checkbox"> Take notes on what shortlisted teams did well</div>
+    <div class="checklist-item"><input type="checkbox"> Use insights for future competitions</div>
+
+    <h3>13. AWARDS & CLOSING - Friday, March 20</h3>
+    <div class="checklist-item"><input type="checkbox"> Optional: Faculty Forum: 8:15-9:15 AM</div>
+    <div class="checklist-item"><input type="checkbox"> Attend Project Debrief: 9:30-11:00 AM</div>
+    <div class="checklist-item"><input type="checkbox"> Participate in Q&A with Project Team</div>
+    <div class="checklist-item"><input type="checkbox"> Get team-specific feedback from judges</div>
+    <div class="checklist-item"><input type="checkbox"> Attend Group Photos: 4:00-4:50 PM</div>
+    <div class="checklist-item"><input type="checkbox"> Attend Awards Program: 5:00-7:00 PM (Winners announced!)</div>
+
+    <h3>14. CRITICAL COMPLIANCE & DISQUALIFICATION RISKS</h3>
+    
+    <div class="checklist-item critical"><input type="checkbox"> NEVER contact Owner/GC/Designers/Subs/Suppliers/anyone affiliated with actual project</div>
+    <div class="checklist-item critical"><input type="checkbox"> DON'T research internet "for answers" (scope differs from actual project)</div>
+    <div class="checklist-item critical"><input type="checkbox"> DON'T use Generative AI for creating/drafting ANY proposal content</div>
+    <div class="checklist-item critical"><input type="checkbox"> CAN use AI for: general research, brainstorming, generic non-sensitive graphics only</div>
+    <div class="checklist-item critical"><input type="checkbox"> DON'T copy QC/Safety plans from external sources</div>
+    <div class="checklist-item critical"><input type="checkbox"> All work must be original and project-specific</div>
+    <div class="checklist-item critical"><input type="checkbox"> DON'T manipulate provided Exhibit forms</div>
+    <div class="checklist-item critical"><input type="checkbox"> DON'T hang banners at competition</div>
+    <div class="checklist-item critical"><input type="checkbox"> Verify RFP/RFI responses override project documents</div>
+    <div class="checklist-item critical"><input type="checkbox"> Missing Excel exports = ZERO for Estimating section</div>
+    <div class="checklist-item critical"><input type="checkbox"> Improper labeling = negative scoring</div>
+    <div class="checklist-item critical"><input type="checkbox"> Missing bookmarks = deductive points</div>
+
+    <h3>15. SCORING WEIGHTS (Know the Priorities!)</h3>
+    
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Weight</th>
+            <th>Notes</th>
+        </tr>
+        <tr>
+            <td>Project Estimate</td>
+            <td>30%</td>
+            <td>Must submit Excel exports!</td>
+        </tr>
+        <tr>
+            <td>Project Management Plan & Schedule</td>
+            <td>25%</td>
+            <td>8-page narrative + supporting docs</td>
+        </tr>
+        <tr>
+            <td>Safety</td>
+            <td>20%</td>
+            <td>8-page narrative + AHA/Emergency Plan/Incident Report</td>
+        </tr>
+        <tr>
+            <td>Quality</td>
+            <td>15%</td>
+            <td>5-page narrative + QC flow chart</td>
+        </tr>
+        <tr>
+            <td>Proposal Format & Technical/Admin</td>
+            <td>10%</td>
+            <td>Following instructions, labeling, bookmarks, tabs</td>
+        </tr>
+    </table>
+    
+    <h3>16. AWARDS CATEGORIES</h3>
+    <div class="checklist-item"><input type="checkbox"> Understand: Top 3 in Estimating (Steps 1 & 2)</div>
+    <div class="checklist-item"><input type="checkbox"> Understand: Top 3 in Project Management (Steps 1 & 2)</div>
+    <div class="checklist-item"><input type="checkbox"> Understand: Top 3 in Quality Control (Steps 1 & 2)</div>
+    <div class="checklist-item"><input type="checkbox"> Understand: Top 3 in Safety (Steps 1 & 2)</div>
+    <div class="checklist-item"><input type="checkbox"> Understand: 1st/2nd/3rd Overall (Steps 1, 2 & 3 combined)</div>
+    <div class="checklist-item"><input type="checkbox"> Note: Late proposals excluded from Overall Champion but eligible for categories</div>
+
+    <h3>17. ADDITIONAL RESOURCES & HELP</h3>
+    <div class="checklist-item"><input type="checkbox"> Contact local ABC Chapter for support</div>
+    <div class="checklist-item"><input type="checkbox"> Contact Haley Moyers for assistance: (202) 595-1974 or <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="83eeecfae6f1f0c3e2e1e0adecf1e4">[email&#160;protected]</a></div>
+    <div class="checklist-item"><input type="checkbox"> Reach out to CMC Committee if needed for industry connections</div>
+    <div class="checklist-item"><input type="checkbox"> Optional: Attend Introduction Virtual Meeting (Monday, Jan 26)</div>
+
+    <h2>📊 QUICK REFERENCE: KEY NUMBERS</h2>
+    
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Specification</th>
+        </tr>
+        <tr>
+            <td>Project Size</td>
+            <td>~686,000 SF, 25-story hotel</td>
+        </tr>
+        <tr>
+            <td>Guestrooms</td>
+            <td>517 rooms</td>
+        </tr>
+        <tr>
+            <td>Meeting Space</td>
+            <td>60,000+ SF (23,000 SF Regency Ballroom)</td>
+        </tr>
+        <tr>
+            <td>Shell-Only Floors</td>
+            <td>Levels 20-25 (6 floors)</td>
+        </tr>
+        <tr>
+            <td>Maximum Duration</td>
+            <td>1,095 calendar days (NTP to Final Completion)</td>
+        </tr>
+        <tr>
+            <td>Self-Perform Minimum</td>
+            <td>7% (excluding fee & GC)</td>
+        </tr>
+        <tr>
+            <td>MWDVBE Goal</td>
+            <td>10%</td>
+        </tr>
+        <tr>
+            <td>Separate Contractor Duration</td>
+            <td>12 weeks (Kitchen/F&B equipment)</td>
+        </tr>
+        <tr>
+            <td>Allowance: Permits</td>
+            <td>$200,000</td>
+        </tr>
+        <tr>
+            <td>Allowance: Low-Voltage</td>
+            <td>$5,000,000</td>
+        </tr>
+        <tr>
+            <td>Team Size</td>
+            <td>4 competitors + advisor (max 2 alternates)</td>
+        </tr>
+        <tr>
+            <td>RFIs Per Round</td>
+            <td>Up to 5 RFIs (2 rounds total)</td>
+        </tr>
+        <tr>
+            <td>PM Narrative Max</td>
+            <td>8 pages</td>
+        </tr>
+        <tr>
+            <td>QC Narrative Max</td>
+            <td>5 pages</td>
+        </tr>
+        <tr>
+            <td>Safety Narrative Max</td>
+            <td>8 pages</td>
+        </tr>
+        <tr>
+            <td>Cover Letter Max</td>
+            <td>1 page</td>
+        </tr>
+        <tr>
+            <td>Presentation Time</td>
+            <td>10-15 minutes (hard stop)</td>
+        </tr>
+        <tr>
+            <td>Interview/Q&A Time</td>
+            <td>10-15 minutes</td>
+        </tr>
+    </table>
+
+    <div class="easter-egg" style="margin-top: 40px;">
+        <h3>🎬 FINAL REMINDER: EASTER EGG!</h3>
+        <p>Don't forget to add a clean page at the VERY END of your Step 1 proposal with each team member's "who would play them in a movie" actor/actress. This proves you read the FAQ document and pay attention to details!</p>
+    </div>
+
+    <footer style="margin-top: 50px; padding: 20px; background-color: #003087; color: white; text-align: center;">
+        <p><strong>ABC Construction Management Competition 2026</strong></p>
+        <p>Hyatt Regency Salt Lake City | March 18-20, 2026</p>
+        <p>Good luck to all competing teams!</p>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Save and restore checkbox states using localStorage
+        const STORAGE_KEY = 'abc_cmc_2026_checklist';
+        
+        // Load saved states when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCheckboxStates();
+            updateProgress();
+            
+            // Add event listeners to all checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach((checkbox, index) => {
+                checkbox.id = checkbox.id || `checkbox-${index}`;
+                checkbox.addEventListener('change', function() {
+                    saveCheckboxStates();
+                    updateProgress();
+                });
+            });
+        });
+        
+        // Save checkbox states to localStorage
+        function saveCheckboxStates() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const states = {};
+            
+            checkboxes.forEach((checkbox) => {
+                if (checkbox.id) {
+                    states[checkbox.id] = checkbox.checked;
+                }
+            });
+            
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(states));
+        }
+        
+        // Load checkbox states from localStorage
+        function loadCheckboxStates() {
+            const savedStates = localStorage.getItem(STORAGE_KEY);
+            
+            if (savedStates) {
+                const states = JSON.parse(savedStates);
+                
+                Object.keys(states).forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.checked = states[id];
+                    }
+                });
+            }
+        }
+        
+        // Update progress indicator
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const total = checkboxes.length;
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const percentage = total > 0 ? Math.round((checked / total) * 100) : 0;
+            
+            let progressBar = document.getElementById('progress-bar');
+            if (!progressBar) {
+                // Create progress bar if it doesn't exist
+                progressBar = document.createElement('div');
+                progressBar.id = 'progress-bar';
+                progressBar.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background-color: #003087; color: white; padding: 10px 20px; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center;';
+                
+                progressBar.innerHTML = `
+                    <div>
+                        <strong>Progress:</strong> 
+                        <span id="progress-text">${checked} of ${total} (${percentage}%)</span>
+                    </div>
+                    <div>
+                        <button onclick="clearAllProgress()" style="background-color: #e31c3d; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-right: 10px;">Clear All</button>
+                        <button onclick="exportProgress()" style="background-color: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Export Progress</button>
+                    </div>
+                `;
+                
+                document.body.insertBefore(progressBar, document.body.firstChild);
+                
+                // Add padding to body so content isn't hidden under fixed bar
+                document.body.style.paddingTop = '60px';
+            } else {
+                document.getElementById('progress-text').textContent = `${checked} of ${total} (${percentage}%)`;
+            }
+        }
+        
+        // Clear all checkbox states
+        function clearAllProgress() {
+            if (confirm('Are you sure you want to clear all your progress? This cannot be undone.')) {
+                localStorage.removeItem(STORAGE_KEY);
+                
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                updateProgress();
+                alert('All progress has been cleared!');
+            }
+        }
+        
+        // Export progress as text file
+        function exportProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const total = checkboxes.length;
+            
+            let exportText = `ABC CMC 2026 Checklist Progress Export\n`;
+            exportText += `Date: ${new Date().toLocaleString()}\n`;
+            exportText += `Progress: ${checked} of ${total} items completed (${Math.round((checked/total)*100)}%)\n\n`;
+            exportText += `Completed Items:\n`;
+            exportText += `================\n\n`;
+            
+            checkboxes.forEach((checkbox, index) => {
+                if (checkbox.
